@@ -33,6 +33,9 @@ class UserProfile extends StatelessWidget {
           children: <Widget>[
             ProfileSlidePicturesWidget(),
             ProfileInfoWidget(),
+            SizedBox(
+              height: 34,
+            ),
             ProfileStoriesWidget(),
           ],
         ),
