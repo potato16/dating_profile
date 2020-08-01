@@ -2,6 +2,7 @@ import 'package:dating_profile/src/bloc_helpers/bloc_provider.dart';
 import 'package:dating_profile/src/blocs/user_profile/user_profile_bloc.dart';
 import 'package:dating_profile/src/models/user_profile.dart';
 import 'package:dating_profile/src/utils/colors.dart';
+import 'package:dating_profile/src/utils/convert.dart';
 import 'package:dating_profile/src/utils/dating_icon_icons.dart';
 import 'package:dating_profile/src/utils/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,8 @@ class ProfileInfoWidget extends StatelessWidget {
                 SizedBox(height: 13),
                 _InfoSession(
                     icon: DatingIcon.date,
-                    content: userProfile?.profile?.birthdate?.toString() ?? ''),
+                    content:
+                        timestampToAgeFormat(userProfile.profile.birthdate)),
                 SizedBox(height: 10),
                 _InfoSession(
                     icon: DatingIcon.work,
