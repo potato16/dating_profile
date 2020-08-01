@@ -1,3 +1,6 @@
+import 'package:dating_profile/src/bloc_helpers/bloc_provider.dart';
+import 'package:dating_profile/src/blocs/user_profile/user_profile_bloc.dart';
+import 'package:dating_profile/src/models/user_profile.dart';
 import 'package:dating_profile/src/utils/colors.dart';
 import 'package:dating_profile/src/utils/dating_icon_icons.dart';
 import 'package:dating_profile/src/utils/text_styles.dart';
@@ -6,31 +9,48 @@ import 'package:flutter/material.dart';
 class ProfileInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final UserProfileBloc userBloc = BlocProvider.of<UserProfileBloc>(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Amny Nguyen',
-            style: DatingTypography.t24M.copyWith(color: DatingColors.black),
-          ),
-          SizedBox(height: 13),
-          _InfoSession(
-              icon: DatingIcon.date, content: 'May 1996, 24 years old'),
-          SizedBox(height: 10),
-          _InfoSession(icon: DatingIcon.work, content: 'English teacher'),
-          SizedBox(height: 10),
-          _InfoSession(
-              icon: DatingIcon.education, content: 'Hoa Sen university'),
-          SizedBox(height: 17),
-          Text(
-            'Nice to meet you! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
-            style: DatingTypography.t16R.copyWith(color: DatingColors.grey),
-          ),
-        ],
-      ),
+      child: StreamBuilder<UserProfile>(
+          stream: userBloc.userProfile,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Container();
+            }
+            final UserProfile userProfile = snapshot.data;
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  userProfile?.profile?.name ?? '',
+                  style:
+                      DatingTypography.t24M.copyWith(color: DatingColors.black),
+                ),
+                SizedBox(height: 13),
+                _InfoSession(
+                    icon: DatingIcon.date,
+                    content: userProfile?.profile?.birthdate?.toString() ?? ''),
+                SizedBox(height: 10),
+                _InfoSession(
+                    icon: DatingIcon.work,
+                    content: userProfile?.profile?.work ?? ''),
+                SizedBox(height: 10),
+                _InfoSession(
+                    icon: DatingIcon.education,
+                    content: userProfile?.profile?.education ?? ''),
+                SizedBox(height: 17),
+                Text(
+                  userProfile?.profile?.bio ?? '',
+                  style:
+                      DatingTypography.t16R.copyWith(color: DatingColors.grey),
+                ),
+              ],
+            );
+          }),
     );
   }
 }
@@ -52,6 +72,7 @@ class _InfoSession extends StatelessWidget {
         Icon(
           icon,
           color: DatingColors.red,
+          size: 18,
         ),
         SizedBox(
           width: 12,

@@ -1,5 +1,7 @@
-import 'dart:async';
-
+import 'package:dating_profile/src/bloc_helpers/bloc_provider.dart';
+import 'package:dating_profile/src/blocs/user_profile/user_profile_bloc.dart';
+import 'package:dating_profile/src/models/user_profile.dart';
+import 'package:dating_profile/src/utils/paths.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dating_profile/src/utils/colors.dart';
@@ -12,7 +14,6 @@ class ProfileSlidePicturesWidget extends StatefulWidget {
 
 class _ProfileSlidePicturesWidgetState
     extends State<ProfileSlidePicturesWidget> {
-  final List<Color> colors = [Colors.red, Colors.pink, Colors.cyan];
   PageController controller;
   @override
   void initState() {
@@ -28,33 +29,48 @@ class _ProfileSlidePicturesWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Container(
-          height: MediaQuery.of(context).size.width,
-          child: PageView.builder(
-            controller: controller,
-            itemCount: colors.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(color: colors.elementAt(index));
-            },
-          ),
-        ),
-        AnimatedBuilder(
-            animation: controller,
-            builder: (context, snapshot) {
-              return CustomPaint(
-                painter: SlideIndicator(
-                  count: colors.length,
-                  scrollValue:
-                      controller.hasClients ? (controller.page ?? 0) : 0.0,
+    final UserProfileBloc bloc = BlocProvider.of<UserProfileBloc>(context);
+    return StreamBuilder<UserProfile>(
+        stream: bloc.userProfile,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Container();
+          }
+          final UserProfile userProfile = snapshot.data;
+          final List<String> images = userProfile?.profile?.images ?? [];
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                height: MediaQuery.of(context).size.width,
+                child: PageView.builder(
+                  controller: controller,
+                  itemCount: images.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return FadeInImage.assetNetwork(
+                      fit: BoxFit.cover,
+                      image: images.elementAt(index),
+                      placeholder: Paths.imgPlaceHolder,
+                    );
+                  },
                 ),
-                child: Container(height: 28),
-              );
-            }),
-      ],
-    );
+              ),
+              AnimatedBuilder(
+                  animation: controller,
+                  builder: (context, snapshot) {
+                    return CustomPaint(
+                      painter: SlideIndicator(
+                        count: images.length,
+                        scrollValue: controller.hasClients
+                            ? (controller.page ?? 0)
+                            : 0.0,
+                      ),
+                      child: Container(height: 28),
+                    );
+                  }),
+            ],
+          );
+        });
   }
 }
 
@@ -66,7 +82,7 @@ class SlideIndicator extends CustomPainter {
     @required this.count,
     @required this.scrollValue,
     this.dotRadius: 2,
-  })  : assert(count > 0, 'Number of indicators must at greater than zero'),
+  })  : assert(count >= 0, 'Number of indicators must at greater than zero'),
         assert(scrollValue != null, 'scrollValue can not be null'),
         dotColor = dotColor ?? DatingColors.blue1,
         indicatorColor = indicatorColor ?? DatingColors.blue;
