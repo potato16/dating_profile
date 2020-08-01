@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'src/pages/user_profile_page.dart';
 
 class RoutePaths {
   static const String root = '/';
@@ -29,7 +31,10 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Container(color: Colors.red),
+      theme: ThemeData(
+        textTheme: GoogleFonts.muliTextTheme(Theme.of(context).textTheme),
+      ),
+      home: UserProfile(),
     );
     // return BlocProvider<AuthenticationBloc>(
     //   bloc: authenticationBloc,
