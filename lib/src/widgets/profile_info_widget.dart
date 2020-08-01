@@ -1,4 +1,5 @@
 import 'package:dating_profile/src/utils/colors.dart';
+import 'package:dating_profile/src/utils/dating_icon_icons.dart';
 import 'package:dating_profile/src/utils/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -16,11 +17,13 @@ class ProfileInfoWidget extends StatelessWidget {
             style: DatingTypography.t24M.copyWith(color: DatingColors.black),
           ),
           SizedBox(height: 13),
-          _InfoSession(icon: Icons.tv, content: 'May 1996, 24 years old'),
+          _InfoSession(
+              icon: DatingIcon.date, content: 'May 1996, 24 years old'),
           SizedBox(height: 10),
-          _InfoSession(icon: Icons.tv, content: 'English teacher'),
+          _InfoSession(icon: DatingIcon.work, content: 'English teacher'),
           SizedBox(height: 10),
-          _InfoSession(icon: Icons.tv, content: 'Hoa Sen university'),
+          _InfoSession(
+              icon: DatingIcon.education, content: 'Hoa Sen university'),
           SizedBox(height: 17),
           Text(
             'Nice to meet you! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
@@ -48,7 +51,7 @@ class _InfoSession extends StatelessWidget {
       children: <Widget>[
         Icon(
           icon,
-          color: Colors.red,
+          color: DatingColors.red,
         ),
         SizedBox(
           width: 12,
