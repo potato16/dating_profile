@@ -10,7 +10,7 @@ class UserProfile extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.light,
-        backgroundColor: DatingColors.black1,
+        backgroundColor: DatingColors.white,
         elevation: 0,
         leading: CircleAvatar(
           backgroundColor: Colors.red,

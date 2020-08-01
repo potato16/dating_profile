@@ -6,4 +6,6 @@ class DatingColors {
   static const Color black1 = Color(0x1A000000);
   static const Color grey = Color(0xFF969696);
   static const Color white = Color(0xFFFFFFFF);
+  static const Color blue1 = Color(0xFFC0DFFB);
+  static const Color blue = Color(0xFF4BA9FF);
 }
