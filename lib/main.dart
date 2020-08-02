@@ -12,7 +12,7 @@ void main() {
       connectTimeout: 5000,
       receiveTimeout: 5000,
     )),
-    appEnvironment: AppEnvironment.DEV,
+    appEnvironment: AppEnvironment.PROD,
   );
   runApp(MyApp());
 }

@@ -27,8 +27,6 @@ class _UserProfileState extends State<UserProfilePage> {
     bloc.emitEvent(UserProfileEvent());
 
     bloc.state.listen((event) {
-      print(event.isProgressing);
-
       if (!event.isProgressing) {
         if (event.isFailed) {
           _refreshController.refreshFailed();
