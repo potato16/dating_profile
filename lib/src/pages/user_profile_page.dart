@@ -94,6 +94,10 @@ class HeartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(DatingIcon.heart_empty, color: DatingColors.red);
+    return Icon(
+      DatingIcon.heart_empty,
+      color: DatingColors.red,
+      size: 18,
+    );
   }
 }

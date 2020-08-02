@@ -1,6 +1,8 @@
+import 'package:dating_profile/app.dart';
 import 'package:dating_profile/src/bloc_helpers/bloc_provider.dart';
 import 'package:dating_profile/src/blocs/user_profile/user_profile_bloc.dart';
 import 'package:dating_profile/src/models/user_profile.dart';
+import 'package:dating_profile/src/pages/image_view_page.dart';
 import 'package:dating_profile/src/utils/paths.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,10 +49,18 @@ class _ProfileSlidePicturesWidgetState
                   controller: controller,
                   itemCount: images.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return FadeInImage.assetNetwork(
-                      fit: BoxFit.cover,
-                      image: images.elementAt(index),
-                      placeholder: Paths.imgPlaceHolder,
+                    return InkWell(
+                      onTap: () => showDialog(
+                        context: context,
+                        builder: (context) => ImageViewPage(
+                          url: images.elementAt(index),
+                        ),
+                      ),
+                      child: FadeInImage.assetNetwork(
+                        fit: BoxFit.cover,
+                        image: images.elementAt(index),
+                        placeholder: Paths.imgPlaceHolder,
+                      ),
                     );
                   },
                 ),
