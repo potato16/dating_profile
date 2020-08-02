@@ -1,5 +1,4 @@
 import 'package:dating_profile/src/utils/colors.dart';
-import 'package:dating_profile/src/utils/paths.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 

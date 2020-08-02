@@ -16,10 +16,9 @@ class UserProfileBloc
   Stream<UserProfileState> eventHandler(
       UserProfileEvent event, UserProfileState currentState) async* {
     switch (event.type) {
-      case UserProfileEventType.init:
+      case UserProfileEventType.fetch:
         yield UserProfileState.fetchProfile();
         final ErrorEnum result = await _fetchProfile();
-
         if (result == null) {
           yield UserProfileState.fetchProfileSuccess();
         } else {

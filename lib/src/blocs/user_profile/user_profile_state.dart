@@ -19,16 +19,12 @@ class UserProfileState extends BlocState {
 
   factory UserProfileState.fetchProfileSuccess() {
     return UserProfileState(
-        state: UserProfileStateEnum.getProfile,
-        isProgressing: false,
-        isSuccess: true);
+        state: UserProfileStateEnum.getProfile, isSuccess: true);
   }
 
   factory UserProfileState.fetchProfileFailed() {
     return UserProfileState(
-        state: UserProfileStateEnum.getProfile,
-        isProgressing: false,
-        isFailed: true);
+        state: UserProfileStateEnum.getProfile, isFailed: true);
   }
 }
 

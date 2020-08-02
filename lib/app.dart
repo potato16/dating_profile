@@ -27,6 +27,9 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute<String>(
                 builder: (_) => ImageViewPage(url: urlImage),
                 settings: settings);
+          default:
+            return MaterialPageRoute<String>(
+                builder: (_) => Container(), settings: settings);
         }
       },
     );

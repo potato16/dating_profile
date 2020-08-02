@@ -1,4 +1,3 @@
-import 'package:dating_profile/app.dart';
 import 'package:dating_profile/src/bloc_helpers/bloc_provider.dart';
 import 'package:dating_profile/src/blocs/user_profile/user_profile_bloc.dart';
 import 'package:dating_profile/src/models/user_profile.dart';
