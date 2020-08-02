@@ -1,6 +1,7 @@
 import 'package:dating_profile/src/bloc_helpers/bloc_provider.dart';
 import 'package:dating_profile/src/blocs/user_profile/user_profile_bloc.dart';
 import 'package:dating_profile/src/blocs/user_profile/user_profile_event.dart';
+import 'package:dating_profile/src/blocs/user_profile/user_profile_state.dart';
 import 'package:dating_profile/src/utils/colors.dart';
 import 'package:dating_profile/src/utils/dating_icon_icons.dart';
 import 'package:dating_profile/src/utils/paths.dart';
@@ -9,6 +10,7 @@ import 'package:dating_profile/src/widgets/profile_info_widget.dart';
 import 'package:dating_profile/src/widgets/profile_slide_pictures_widget.dart';
 import 'package:dating_profile/src/widgets/profile_stories_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -17,15 +19,30 @@ class UserProfilePage extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfilePage> {
   UserProfileBloc bloc;
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   @override
   void initState() {
     bloc = UserProfileBloc();
     bloc.emitEvent(UserProfileEvent());
+
+    bloc.state.listen((event) {
+      print(event.isProgressing);
+
+      if (!event.isProgressing) {
+        if (event.isFailed) {
+          _refreshController.refreshFailed();
+        } else {
+          _refreshController.refreshCompleted();
+        }
+      }
+    });
     super.initState();
   }
 
   @override
   void dispose() {
+    _refreshController.dispose();
     bloc.dispose();
     super.dispose();
   }
@@ -70,20 +87,48 @@ class _UserProfileState extends State<UserProfilePage> {
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              ProfileSlidePicturesWidget(),
-              ProfileInfoWidget(),
-              SizedBox(
-                height: 34,
-              ),
-              ProfileStoriesWidget(),
-            ],
+        body: SmartRefresher(
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          //  onLoading: _onLoading,
+          header: MaterialClassicHeader(
+            backgroundColor: DatingColors.white,
+            color: Colors.blue,
+          ),
+          child: SingleChildScrollView(
+            child: StreamBuilder<UserProfileState>(
+                stream: bloc.state,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Container();
+                  }
+                  if (snapshot.data.isFailed) {
+                    return Column(
+                      children: <Widget>[
+                        Image.asset(Paths.dog),
+                        Text('Something went wrong!'),
+                      ],
+                    );
+                  }
+                  return Column(
+                    children: <Widget>[
+                      ProfileSlidePicturesWidget(),
+                      ProfileInfoWidget(),
+                      SizedBox(
+                        height: 34,
+                      ),
+                      ProfileStoriesWidget(),
+                    ],
+                  );
+                }),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _onRefresh() async {
+    bloc.emitEvent(UserProfileEvent(type: UserProfileEventType.init));
   }
 }
 
@@ -127,10 +172,18 @@ class _HeartWidgetState extends State<HeartWidget>
       isLove = value;
       if (isLove) {
         animationController.forward();
+      } else {
+        animationController.stop();
       }
       setState(() {});
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 
   @override

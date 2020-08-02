@@ -3,9 +3,9 @@ import 'package:dating_profile/src/bloc_helpers/bloc_event_state.dart';
 class UserProfileState extends BlocState {
   UserProfileState({
     this.state,
-    this.isProgressing,
-    this.isFailed,
-    this.isSuccess,
+    this.isProgressing: false,
+    this.isFailed: false,
+    this.isSuccess: false,
   });
   final UserProfileStateEnum state;
   final bool isProgressing;

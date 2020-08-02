@@ -14,3 +14,11 @@ String timestampToAgeFormat(int timestamp) {
   final birthDayFormated = DateFormat('MMM yyyy').format(date);
   return '$birthDayFormated, $age years old';
 }
+
+String timestampToDateFormat(int timestamp) {
+  if (timestamp == null || timestamp < 0) {
+    return '';
+  }
+  final date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+  return DateFormat('MM/yy').format(date);
+}
