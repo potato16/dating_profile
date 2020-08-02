@@ -34,6 +34,7 @@ class UserProfileBloc
       BehaviorSubject<UserProfile>();
   final BehaviorSubject<String> _userAvatarController =
       BehaviorSubject<String>();
+  final BehaviorSubject<bool> _loveController = BehaviorSubject<bool>();
 
   Stream<String> get userAvatar => _userAvatarController.stream;
   Stream<String> get displayName => _profileController.stream.transform(
@@ -44,7 +45,8 @@ class UserProfileBloc
         ),
       );
   Stream<UserProfile> get userProfile => _profileController.stream;
-
+  Function(bool) get giveLove => _loveController.sink.add;
+  Stream<bool> get love => _loveController.stream;
   Future<ErrorEnum> _fetchProfile() async {
     final UserProfile response = await _userProfileRepository.getUserProfile();
     if (response == null) {
@@ -52,5 +54,13 @@ class UserProfileBloc
     }
     _profileController.sink.add(response);
     return Future<ErrorEnum>.value();
+  }
+
+  @override
+  void dispose() {
+    _profileController.close();
+    _userAvatarController.close();
+    _loveController.close();
+    super.dispose();
   }
 }
